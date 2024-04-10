@@ -8,7 +8,9 @@ tumor_col_path = args[7]
 normal_col_path = args[8]
 output_path = args[9]
 
-data = read.csv(data_path, header=TRUE, sep=',')
+# data = read.csv(data_path, header=TRUE, sep=',')
+# 更改：解决读取的样本名称前有字母X的问题
+data = read.csv(data_path, header=TRUE, sep=',',check.names=F)
 tumor_col = read.table(tumor_col_path, header=TRUE)
 normal_col = read.table(normal_col_path, header=TRUE)
 

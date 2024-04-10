@@ -79,7 +79,8 @@ def run_ttest(normal_run_path, tumor_test_path, workdir, Q_THRES = 0.05, D_THRES
 
     _equal_val = []
     for tt in ttest_list:
-        if tt > 0.05:
+        if tt < 0.05:
+            # 这里原来错了，应该更改为现在的小于
             _equal_val.append(False)
         else:
             _equal_val.append(True)
@@ -102,11 +103,11 @@ def run_ttest(normal_run_path, tumor_test_path, workdir, Q_THRES = 0.05, D_THRES
     fdr_down, fdr_up = [], []
     num_down, num_up = [], []
 
-    tumor_ttest_up.iloc[:,:] = 0
-    tumor_ttest_down.iloc[:,:] = 0
+    tumor_ttest_up.iloc[:,:] = 0 # 这句代码的意思是将所有的值都设置为0
+    tumor_ttest_down.iloc[:,:] = 0 # 这句代码的意思是将所有的值都设置为0
 
-    tumor_ttest_up[(np.array(q_value_list) < Q_THRES) & (direct_list > D_THRES)] = 1
-    tumor_ttest_down[(np.array(q_value_list) < Q_THRES) & (direct_list < -D_THRES)] = 1
+    tumor_ttest_up[(np.array(q_value_list) < Q_THRES) & (direct_list > D_THRES)] = 1 #当蛋白表达变化方向为上调，且q值小于阈值时，将该蛋白的值设置为1，在python中，1为True，0为False
+    tumor_ttest_down[(np.array(q_value_list) < Q_THRES) & (direct_list < -D_THRES)] = 1 #当蛋白表达变化方向为下调，且q值小于阈值时，将该蛋白的值设置为1，在python中，1为True，0为False
 
     if SAVE_OUT:
 

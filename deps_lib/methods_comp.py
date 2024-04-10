@@ -84,8 +84,15 @@ class methodsComp(object):
 
         gold_S = gold_S.astype("int")
         
+        precision_mess_u = {}
+        precision_mess_d = {}
         precision_mess = {}
+
+        positive_mess_u = {}
+        positive_mess_d = {}
         positive_mess = {}
+        
+        
 
         ############## rankcomp v1,v2 ###############################
         if 'RankComp' in self.METHODS_LIST:
@@ -94,12 +101,14 @@ class methodsComp(object):
             u_v1, u_v1_T, d_v1, d_v1_T , r_v1, r_v1_T = [], [], [], [], [], []
             u_v2, u_v2_T, d_v2, d_v2_T , r_v2, r_v2_T = [], [], [], [], [], []
 
+            # 在rankc_v1_up和rankc_v1_down中，0表示不是上调或下调的蛋白，1表示是上调或下调的蛋白
+
             for col in rankc_v1_up.columns:
-                u_v1.extend([rankc_v1_up[col].sum()])
-                d_v1.extend([rankc_v1_down[col].sum()])
+                u_v1.extend([rankc_v1_up[col].sum()]) 
+                d_v1.extend([rankc_v1_down[col].sum()]) 
                 r_v1.extend([rankc_v1_up[col].sum() + rankc_v1_down[col].sum()])
 
-                u_v1_T.extend([(gold_S[rankc_v1_up] == 2).sum()[col]])
+                u_v1_T.extend([(gold_S[rankc_v1_up] == 2).sum()[col]]) 
                 d_v1_T.extend([(gold_S[rankc_v1_down] == 1).sum()[col]])
                 r_v1_T.extend([(gold_S[rankc_v1_down] == 1).sum()[col] + (gold_S[rankc_v1_up] == 2).sum()[col]])
                 
@@ -122,6 +131,19 @@ class methodsComp(object):
             prec_r_v1 = np.array(r_v1_T) / np.array(r_v1)
             prec_r_v2 = np.array(r_v2_T) / np.array(r_v2)
             
+            # added by lja
+            precision_mess_u['rankc_v1'] = prec_u_v1
+            precision_mess_d['rankc_v1'] = prec_d_v1
+
+            positive_mess_u['rankc_v1'] = u_v1
+            positive_mess_d['rankc_v1'] = d_v1
+
+            precision_mess_u['rankc_v2'] = prec_u_v2
+            precision_mess_d['rankc_v2'] = prec_d_v2
+
+            positive_mess_u['rankc_v2'] = u_v2
+            positive_mess_d['rankc_v2'] = d_v2
+
             precision_mess['rankc_v1'] = prec_r_v1
             positive_mess['rankc_v1'] = r_v1
             precision_mess['rankc_v2'] = prec_r_v2
@@ -145,6 +167,13 @@ class methodsComp(object):
             prec_d_penda = np.array(d_penda_T) / np.array(d_penda)
             prec_r_penda = np.array(r_penda_T) / np.array(r_penda)   
             
+            # added by lja
+            precision_mess_u['penda'] = prec_u_penda
+            precision_mess_d['penda'] = prec_d_penda
+
+            positive_mess_u['penda'] = u_penda
+            positive_mess_d['penda'] = d_penda
+
             precision_mess['penda'] = prec_r_penda
             positive_mess['penda'] = r_penda
 
@@ -165,6 +194,13 @@ class methodsComp(object):
             prec_u_penda_fdr = np.array(u_penda_fdr_T) / np.array(u_penda_fdr)
             prec_d_penda_fdr = np.array(d_penda_fdr_T) / np.array(d_penda_fdr)
             prec_r_penda_fdr = np.array(r_penda_fdr_T) / np.array(r_penda_fdr) 
+
+            # added by lja
+            precision_mess_u['penda_fdr'] = prec_u_penda_fdr
+            precision_mess_d['penda_fdr'] = prec_d_penda_fdr
+
+            positive_mess_u['penda_fdr'] = u_penda_fdr
+            positive_mess_d['penda_fdr'] = d_penda_fdr
 
             precision_mess['penda_fdr'] = prec_r_penda_fdr
             positive_mess['penda_fdr'] = r_penda_fdr
@@ -187,6 +223,13 @@ class methodsComp(object):
             prec_d_penda_pro = np.array(d_penda_pro_T) / np.array(d_penda_pro)
             prec_r_penda_pro = np.array(r_penda_pro_T) / np.array(r_penda_pro) 
             
+            # added by lja
+            precision_mess_u['penda_pro'] = prec_u_penda_pro
+            precision_mess_d['penda_pro'] = prec_d_penda_pro
+
+            positive_mess_u['penda_pro'] = u_penda_pro
+            positive_mess_d['penda_pro'] = d_penda_pro
+
             precision_mess['penda_pro'] = prec_r_penda_pro
             positive_mess['penda_pro'] = r_penda_pro
             
@@ -208,6 +251,13 @@ class methodsComp(object):
             prec_u_peng = np.array(u_peng_T) / np.array(u_peng)
             prec_d_peng = np.array(d_peng_T) / np.array(d_peng)
             prec_r_peng = np.array(r_peng_T) / np.array(r_peng)   
+
+            # added by lja
+            precision_mess_u['peng_method'] = prec_u_peng
+            precision_mess_d['peng_method'] = prec_d_peng
+
+            positive_mess_u['peng_method'] = u_peng
+            positive_mess_d['peng_method'] = d_peng
             
             precision_mess['peng_method'] = prec_r_peng
             positive_mess['peng_method'] = r_peng
@@ -231,6 +281,13 @@ class methodsComp(object):
             prec_u_tt = np.array(u_tt_T) / np.array(u_tt)
             prec_d_tt = np.array(d_tt_T) / np.array(d_tt)
             prec_r_tt = np.array(r_tt_T) / np.array(r_tt)
+
+            # added by lja
+            precision_mess_u['ttest'] = prec_u_tt
+            precision_mess_d['ttest'] = prec_d_tt
+
+            positive_mess_u['ttest'] = u_tt
+            positive_mess_d['ttest'] = d_tt
             
             precision_mess['ttest'] = prec_r_tt
             positive_mess['ttest'] = r_tt
@@ -253,6 +310,13 @@ class methodsComp(object):
             prec_u_wilc = np.array(u_wilc_T) / np.array(u_wilc)
             prec_d_wilc = np.array(d_wilc_T) / np.array(d_wilc)
             prec_r_wilc = np.array(r_wilc_T) / np.array(r_wilc)
+
+            # added by lja
+            precision_mess_u['wilcox'] = prec_u_wilc
+            precision_mess_d['wilcox'] = prec_d_wilc
+
+            positive_mess_u['wilcox'] = u_wilc
+            positive_mess_d['wilcox'] = d_wilc
             
             precision_mess['wilcox'] = prec_r_wilc
             positive_mess['wilcox'] = r_wilc
@@ -275,6 +339,13 @@ class methodsComp(object):
             prec_u_quant = np.array(u_quant_T) / np.array(u_quant)
             prec_d_quant = np.array(d_quant_T) / np.array(d_quant)
             prec_r_quant = np.array(r_quant_T) / np.array(r_quant)
+
+            # added by lja
+            precision_mess_u['quantile'] = prec_u_quant
+            precision_mess_d['quantile'] = prec_d_quant
+
+            positive_mess_u['quantile'] = u_quant
+            positive_mess_d['quantile'] = d_quant
             
             precision_mess['quantile'] = prec_r_quant
             positive_mess['quantile'] = r_quant
@@ -289,7 +360,35 @@ class methodsComp(object):
         plt.rcParams['figure.dpi'] = 300 #分辨率
         plt.rcParams['axes.unicode_minus']=False # 用来显示负号
 
+        ################# save results in csv file ############################
+        def transfer_results(dict, file_name):
+            methods = list(dict.keys())
+            num_samples = len(dict[methods[0]])
 
+            data = {}
+            for method in methods:
+                data[method] = dict[method]
+
+            index = ['{}'.format(i+1) for i in range(num_samples)]
+            df = pd.DataFrame(data, index=index)
+            df = df.transpose()
+            df.index.name = 'method'
+            df.columns.name = 'sample'
+            df = df.reset_index().rename({'method': 'index'}, axis=1).set_index('index')
+
+            # os.chdir(os.path.dirname(os.path.abspath(__file__)))
+            df.to_csv(file_name)
+
+        # 创建results文件夹
+        if os.path.exists(save_path + '/results') == False:
+            os.makedirs(save_path + '/results')
+
+        transfer_results(precision_mess_u, save_path + '/results/precision_mess_u.csv')
+        transfer_results(precision_mess_d, save_path + '/results/precision_mess_d.csv')
+        transfer_results(precision_mess, save_path + '/results/precision_mess.csv')
+        transfer_results(positive_mess_u, save_path + '/results/positive_mess_u.csv')
+        transfer_results(positive_mess_d, save_path + '/results/positive_mess_d.csv')
+        transfer_results(positive_mess, save_path + '/results/positive_mess.csv')
 
         # 画图
         x_list = np.arange(1,val_tumor.shape[1]+1)
@@ -552,6 +651,12 @@ class methodsComp(object):
 
         else:
             rankc_result = None
+            # lja加入
+            rankc_v1_up = None
+            rankc_v2_up = None
+            rankc_v1_down = None
+            rankc_v2_down = None
+            # 结束
 
         ################ Penda #########################
         if 'Penda' in self.METHODS_LIST:
@@ -642,8 +747,10 @@ class methodsComp(object):
             # run penda
             utils.write_penda_data(normal_run_data, tumor_run_data, penda_workspace)
             peng_up, peng_down = methods_lib.run_peng_method(normal_run_data, tumor_run_data)
-            penda_up = penda_up.loc[tumor_run_data.index.tolist(),tumor_run_data.columns.tolist()]
-            penda_down = penda_down.loc[tumor_run_data.index.tolist(), tumor_run_data.columns.tolist()]
+            # penda_up = penda_up.loc[tumor_run_data.index.tolist(),tumor_run_data.columns.tolist()] # 这里错了，应该改成peng_up
+            peng_up = peng_up.loc[tumor_run_data.index.tolist(),tumor_run_data.columns.tolist()]
+            # penda_down = penda_down.loc[tumor_run_data.index.tolist(), tumor_run_data.columns.tolist()] # 这里错了，应该改成peng_down
+            peng_down = peng_down.loc[tumor_run_data.index.tolist(), tumor_run_data.columns.tolist()]
             peng_up.to_csv('./peng_up.csv')
             peng_down.to_csv('./peng_down.csv')
         else:
