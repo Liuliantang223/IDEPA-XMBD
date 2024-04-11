@@ -1,12 +1,6 @@
 #!/usr/bin/
 # -*- coding: utf-8 -*-
 
-__author__ = 'Liu Yachen'
-
-# 运行前修改r_package/bpca_v2.R
-# 运行前修改deps_lib/methods_comp.py
-# 运行前修改deps_lib/methods_lib.py
-
 import click
 import copy
 import os
@@ -21,7 +15,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 from scipy import stats
-from matplotlib_venn import venn2,venn2_circles
+from matplotlib_venn import venn2, venn2_circles
 from deps_lib import utils, raw_data, stable_pairs, methods_comp, penda_pro, methods_lib, similarity_lib, type1_error_lib, robustness_lib, kegg_lib, survival_lib
 
 import rpy2
@@ -34,23 +28,24 @@ r_stats = importr('stats')
 
 plt.rcParams['font.sans-serif'] = ['SimHei']  
 sns.set(font_scale=1.5)  
-plt.rcParams['axes.unicode_minus']=False 
+plt.rcParams['axes.unicode_minus'] = False 
 
 ''' Compare the precision of DEAs with the number of DEPs '''
 
 ########################## parameters input ##############################
 
-# workdir
-workdir = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/workdir'
-mc_workdir = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/workdir/mc_workdir'
+# base directory
+idea_dir = '/path/to/your/IDEPA-XMBD/directory' # For exp, '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD'
 
+# workdir
+workdir = os.path.join(idea_dir, 'workdir')
+mc_workdir = os.path.join(idea_dir, 'workdir/mc_workdir')
 
 # script
-r_bpca_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/r_package/bpca_v2.R'
-r_penda_fdr_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/r_package/penda_deps_v2.R'
-r_penda_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/r_package/penda_deps_v3.R'
-reoa_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/deps_lib/reoa/bin/reoa'
-
+r_bpca_path = os.path.join(idea_dir, 'r_package/bpca_v2.R')
+r_penda_fdr_path = os.path.join(idea_dir, 'r_package/penda_deps_v2.R')
+r_penda_path = os.path.join(idea_dir, 'r_package/penda_deps_v3.R')
+reoa_path = os.path.join(idea_dir, 'deps_lib/reoa/bin/reoa')
 
 # preprocess parameters
 LOG_LABEL = True
@@ -70,15 +65,14 @@ FDR = 0.05
 MAX_EXCEPTION_RANKC = 0.05
 
 # methods comparison parameter
-data_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/data/test_run_data/methodsComp/data.csv'
-normal_cohort_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/data/test_run_data/methodsComp/normal.txt'
-tumor_cohort_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/data/test_run_data/methodsComp/tumor.txt'
+data_path = os.path.join(idea_dir, 'data/test_run_data/methodsComp/data.csv')
+normal_cohort_path = os.path.join(idea_dir, 'data/test_run_data/methodsComp/normal.txt')
+tumor_cohort_path = os.path.join(idea_dir, 'data/test_run_data/methodsComp/tumor.txt')
 
+paired_data_path = os.path.join(idea_dir, 'data/test_run_data/methodsComp/paired_data.csv')
+paired_samples_path = os.path.join(idea_dir, 'data/test_run_data/methodsComp/paired_samples.txt')
 
-paired_data_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/data/test_run_data/methodsComp/paired_data.csv'
-paired_samples_path = '/cluster2/huanglab/jiaao/individualized_analysis/IDEPA-XMBD/data/test_run_data/methodsComp/paired_samples.txt'
-
-METHODS_LIST = ['RankComp', 'Penda', 'T-test', 'Wilcoxon', 'Quantile']
+METHODS_LIST = ['RankComp', 'Penda', 'T-test', 'Wilcoxon', 'Quantile','Peng method']
 
 # read data
 data = utils.read_data(data_path)
